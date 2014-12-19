@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "pushes_checker.py", line 67, in <module>
+    latte = lattefy()
+  File "pushes_checker.py", line 12, in __init__
+    self.cycle()
+  File "pushes_checker.py", line 66, in cycle
+    time.sleep(1)
+KeyboardInterrupt

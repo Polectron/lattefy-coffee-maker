@@ -15,4 +15,4 @@ p.ChangeFrequency(900)
 p.ChangeDutyCycle(70)
 time.sleep(0.1)
 p.stop()
-GPIO.cleanup
+GPIO.cleanup()

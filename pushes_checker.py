@@ -1,5 +1,9 @@
 from pushbullet import PushBullet
+import RPi.GPIO as GPIO
 import time
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+GPIO.setup(17,GPIO.OUT)
 class lattefy():
     def __init__(self):
         self.token = "w33vXv9uztYSjBDXWAH0MPrwMigEifeQ"
@@ -46,11 +50,14 @@ class lattefy():
                     sender_email = push["sender_email"]
                     order_result = self.get_order(body) 
                     if order_result > 0:
+                        GPIO.output(17,GPIO.HIGH)
                         if order_result == 1:
                             print("Preparando café con leche")
                         elif order_result == 2:
                             print("Preparando café solo")
                         self.get_sender(sender_iden,sender_name,sender_email).push_note("¡Orden terminada!","Ya puedes recoger tu {0}".format(re_body))
+                        time.sleep(2)
+                        GPIO.output(17,GPIO.LOW)
                     else:
                         self.get_sender(sender_iden,sender_name,sender_email).push_note("Error","Servicio no reconocido, prueba a pedir un 'café con leche' o un 'café solo'")
                     success_now, pushes_now = self.pb.get_pushes()
