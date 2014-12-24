@@ -3,8 +3,10 @@ import RPi.GPIO as GPIO
 import time
 import threading
 import smbus
+
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
+
 class lattefy():
     def __init__(self):
         #Pushbullet API data
@@ -50,6 +52,20 @@ class lattefy():
             return 2
         else:
             return 0
+    
+    def buzz():        
+        p = GPIO.PWM(12, 3000)
+        p.start(0)
+        p.ChangeFrequency(900) #900Hz
+        p.ChangeDutyCycle(70)
+        time.sleep(0.1)
+        p.stop()
+        time.sleep(0.1)
+        p.start(0)
+        p.ChangeFrequency(900)
+        p.ChangeDutyCycle(70)
+        time.sleep(0.1)
+        p.stop()
  
     def pbCycle(self):
         while True:
@@ -83,22 +99,7 @@ class lattefy():
     def btnCycle(self):
         while True:
             if (GPIO.input(11) == 1):
-                GPIO.output(7,1)
                 print("Botón pulsado")
                 time.sleep(1.4)
-                p = GPIO.PWM(12, 3000)  # channel=12 frequency=3000Hz
-                p.start(0)
-                p.ChangeFrequency(900)
-                p.ChangeDutyCycle(70)
-                time.sleep(0.1)
-                p.stop()
-                time.sleep(0.1)
-                p.start(0)
-                p.ChangeFrequency(900)
-                p.ChangeDutyCycle(70)
-                time.sleep(0.1)
-                p.stop()
-            else:
-                GPIO.output(7,0)
     
 latte = lattefy()
