@@ -3,11 +3,18 @@ import RPi.GPIO as GPIO
 import time
 import threading
 import smbus
+from collections import deque
+
+btn1 = 7
+btn2 = 11
+buzzer = 12
 
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
-GPIO.setup(11, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(12, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(btn1, GPIO.IN)
+GPIO.setup(btn2, GPIO.IN)
+GPIO.setup(buzzer, GPIO.OUT)
+
 
 class lattefy():
     def __init__(self):
@@ -17,7 +24,7 @@ class lattefy():
         self.pb.contacts
     
         #Coffee orders array
-        self.orders = []
+        self.orders = deque([])
         
         #Setting up SPI connection
         self.SPI_bus = smbus.SMBus(1)
@@ -32,13 +39,16 @@ class lattefy():
         self.hilo2.start()
         
         while True:
-            for order in self.orders:
-                self.SPI_bus.write_byte(self.SPI_address, order) #Send order number to Arduino
-                if order == 1: #Option 1
-                    print(order)
-                elif order == 2: #Option 2
-                    print(order)
-            self.orders = []
+            if len(self.orders) > 0:
+                self.SPI_bus.write_byte(self.SPI_address, self.orders[0]) #Send order number to Arduino
+                if self.orders[0] == 1: #Option 1
+                    print(self.orders[0])
+                elif self.orders[0] == 2: #Option 2
+                    print(self.orders[0])
+                self.orders.popleft()
+                time.sleep(0.3)
+                self.buzz()
+
     def get_sender(self,sender_iden,sender_name,sender_email):
         for contact in self.pb.contacts:
             if contact.email == sender_email:
@@ -63,8 +73,8 @@ class lattefy():
         else:
             return 0
     
-    def buzz():        
-        p = GPIO.PWM(12, 3000)
+    def buzz(self):        
+        p = GPIO.PWM(buzzer, 3000)
         p.start(0)
         p.ChangeFrequency(900) #900Hz
         p.ChangeDutyCycle(70)
@@ -108,11 +118,11 @@ class lattefy():
     
     def btnCycle(self):
         while True:
-            if GPIO.input(11) == 1:
+            if GPIO.input(btn1) == 1:
                 self.orders.append(1)
-                time.sleep(1.4)
-            elif GPIO.input(12) == 1:
+                time.sleep(0.4)
+            elif GPIO.input(btn2) == 1:
                 self.orders.append(2)
-                time.sleep(1.4)
+                time.sleep(0.4)
     
 latte = lattefy()
