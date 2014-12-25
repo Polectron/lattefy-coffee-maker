@@ -18,8 +18,8 @@ class lattefy():
         self.orders = []
         
         #Setting up SPI connection
-        self.bus = smbus.SMBus(1)
-        self.address = 0x04
+        self.SPI_bus = smbus.SMBus(1)
+        self.SPI_address = 0x04
         
         #Threading Pushbullet checks
         self.hilo=threading.Thread(target=self.pbCycle)
@@ -28,7 +28,14 @@ class lattefy():
         #Threading buttons checks
         self.hilo2=threading.Thread(target=self.btnCycle)
         self.hilo2.start()
-    
+        
+        while True:
+            for order in self.orders:
+                self.SPI_bus.write_byte(address, order) #Send order number to Arduino
+                if order == 1: #Option 1
+                    print(order)
+                elif order == 2: #Option 2
+                    print(order)
     def get_sender(self,sender_iden,sender_name,sender_email):
         for contact in self.pb.contacts:
             if contact.email == sender_email:
@@ -81,7 +88,6 @@ class lattefy():
                     sender_name = push["sender_name"]
                     sender_email = push["sender_email"]
                     order_result = self.get_order(body)
-                    self.orders.append(order_result)
                     if order_result > 0:
                         if order_result == 1:
                             print("Preparando café con leche")
@@ -89,6 +95,7 @@ class lattefy():
                             print("Preparando café solo")
                         self.get_sender(sender_iden,sender_name,sender_email).push_note("¡Orden terminada!","Ya puedes recoger tu {0}".format(re_body))
                         time.sleep(2)
+                        self.orders.append(order_result)
                     else:
                         self.get_sender(sender_iden,sender_name,sender_email).push_note("Error","Servicio no reconocido, prueba a pedir un 'café con leche' o un 'café solo'")
                     success_now, pushes_now = self.pb.get_pushes()
@@ -98,8 +105,11 @@ class lattefy():
     
     def btnCycle(self):
         while True:
-            if (GPIO.input(11) == 1):
-                print("Botón pulsado")
+            if GPIO.input(11) == 1:
+                self.orders.append(1)
+                time.sleep(1.4)
+            elif GPIO.input(12) == 1:
+                self.orders.append(2)
                 time.sleep(1.4)
     
 latte = lattefy()
