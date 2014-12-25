@@ -38,6 +38,7 @@ class lattefy():
                     print(order)
                 elif order == 2: #Option 2
                     print(order)
+            self.orders = []
     def get_sender(self,sender_iden,sender_name,sender_email):
         for contact in self.pb.contacts:
             if contact.email == sender_email:
