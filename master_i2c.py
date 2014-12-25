@@ -22,7 +22,7 @@ while True:
         continue
 
     writeNumber(var)
-    print "RPI: Hi Arduino, I sent you {0} ".format(var)
+    print("RPI: Hi Arduino, I sent you {0} ".format(var))
     # sleep one second
     time.sleep(1)
 
