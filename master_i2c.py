@@ -17,12 +17,12 @@ def readNumber():
     return number
 
 while True:
-    var = input("Enter 1 - 9: ")
+    var = int(input("Enter 1 - 9: "))
     if not var:
         continue
 
     writeNumber(var)
-    print "RPI: Hi Arduino, I sent you ", var
+    print("RPI: Hi Arduino, I sent you {0} ".format(var))
     # sleep one second
     time.sleep(1)
 

@@ -33,11 +33,12 @@ class lattefy():
         
         while True:
             for order in self.orders:
-                self.SPI_bus.write_byte(address, order) #Send order number to Arduino
+                self.SPI_bus.write_byte(self.SPI_address, order) #Send order number to Arduino
                 if order == 1: #Option 1
                     print(order)
                 elif order == 2: #Option 2
                     print(order)
+            self.orders = []
     def get_sender(self,sender_iden,sender_name,sender_email):
         for contact in self.pb.contacts:
             if contact.email == sender_email:
