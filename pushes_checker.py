@@ -40,14 +40,17 @@ class lattefy():
         
         while True:
             if len(self.orders) > 0:
-                self.SPI_bus.write_byte(self.SPI_address, self.orders[0]) #Send order number to Arduino
+                try:
+                    self.SPI_bus.write_byte(self.SPI_address, self.orders[0]) #Send order number to Arduino
+                except:
+                    pass
                 if self.orders[0] == 1: #Option 1
                     print(self.orders[0])
                 elif self.orders[0] == 2: #Option 2
                     print(self.orders[0])
                 self.orders.popleft()
-                time.sleep(0.3)
-                self.buzz()
+                time.sleep(5)
+                self.SPI_bus.write_byte(self.SPI_address, 3) #Ask Arduino to buzz
 
     def get_sender(self,sender_iden,sender_name,sender_email):
         for contact in self.pb.contacts:
