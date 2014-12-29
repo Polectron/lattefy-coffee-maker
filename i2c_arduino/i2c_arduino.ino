@@ -17,8 +17,8 @@ void setup() {
     // define callbacks for i2c communication
     Wire.onReceive(receiveData);
     Wire.onRequest(sendData);
-
-    Serial.println("Ready!");
+    
+    lcd.print("Esperando orden");
     
 }
 
@@ -29,6 +29,7 @@ void loop() {
         buzz();
         number = 0;
         lcd.clear();
+        lcd.print("Esperando orden");
     }
 }
 
