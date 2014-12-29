@@ -51,6 +51,10 @@ class lattefy():
                 self.orders.popleft()
                 time.sleep(5)
                 self.SPI_bus.write_byte(self.SPI_address, 3) #Ask Arduino to buzz
+                time.sleep(1)
+            #else:
+                #self.SPI_bus.write_byte(self.SPI_address, 0) #Send blank
+                #time.sleep(1.5)
 
     def get_sender(self,sender_iden,sender_name,sender_email):
         for contact in self.pb.contacts:
