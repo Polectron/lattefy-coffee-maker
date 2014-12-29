@@ -39,22 +39,22 @@ class lattefy():
         self.hilo2.start()
         
         while True:
-            if len(self.orders) > 0:
-                try:
-                    self.SPI_bus.write_byte(self.SPI_address, self.orders[0]) #Send order number to Arduino
-                except:
-                    pass
-                if self.orders[0] == 1: #Option 1
-                    print(self.orders[0])
-                elif self.orders[0] == 2: #Option 2
-                    print(self.orders[0])
-                self.orders.popleft()
-                time.sleep(5)
-                self.SPI_bus.write_byte(self.SPI_address, 3) #Ask Arduino to buzz
-                time.sleep(1)
-            #else:
-                #self.SPI_bus.write_byte(self.SPI_address, 0) #Send blank
-                #time.sleep(1.5)
+            if True:
+                if len(self.orders) > 0:
+                    try:
+                        self.SPI_bus.write_byte(self.SPI_address, self.orders[0]) #Send order number to Arduino
+                    except:
+                        pass
+                    self.makeOrder(self.orders[0])
+                    self.orders.popleft()
+                    time.sleep(5)
+                    self.SPI_bus.write_byte(self.SPI_address, 3) #Ask Arduino to buzz
+                    time.sleep(1)
+                #else:
+                    #self.SPI_bus.write_byte(self.SPI_address, 0) #Send blank
+                    #time.sleep(1.5)
+            else:
+                print("No hay tazas libres")
 
     def get_sender(self,sender_iden,sender_name,sender_email):
         for contact in self.pb.contacts:
@@ -131,5 +131,15 @@ class lattefy():
             elif GPIO.input(btn2) == 1:
                 self.orders.append(2)
                 time.sleep(0.4)
+                
+    def makeOrder(self,order):
+        if order == 1:
+            print("Café")
+            print("Liberar café en el filtro")
+            print("Calentar agua")
+            print("Abrir filtro")
+            print("Comprobar nivel de la taza")
+        elif order == 2:
+            print("Té")
     
 latte = lattefy()
