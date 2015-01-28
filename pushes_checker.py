@@ -133,12 +133,18 @@ class lattefy():
                 time.sleep(0.4)
                 
     def makeOrder(self,order):
+        time.sleep(1)
         if order == 1:
             print("Café")
             print("Liberar café en el filtro")
+            self.SPI_bus.write_byte(self.SPI_address, 4) #Servo 0 
+            time.sleep(1)
             print("Calentar agua")
             print("Abrir filtro")
             print("Comprobar nivel de la taza")
+            time.sleep(1)
+            self.SPI_bus.write_byte(self.SPI_address, 5) #Servo 170
+            time.sleep(1)
         elif order == 2:
             print("Té")
     
