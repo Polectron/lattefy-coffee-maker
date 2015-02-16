@@ -19,7 +19,7 @@ GPIO.setup(buzzer, GPIO.OUT)
 class lattefy():
     def __init__(self):
         #Pushbullet API data
-        self.token = "w33vXv9uztYSjBDXWAH0MPrwMigEifeQ"
+        self.token = "BXRMMQMOGoLoQY4LWLsOOzf8ep3vlD5F"
         self.pb = PushBullet(self.token)
         self.pb.contacts
     
@@ -45,10 +45,10 @@ class lattefy():
                         self.SPI_bus.write_byte(self.SPI_address, self.orders[0]) #Send order number to Arduino
                     except:
                         pass
-                    self.makeOrder(self.orders[0])
+                    #self.makeOrder(self.orders[0])
                     self.orders.popleft()
-                    time.sleep(5)
-                    self.SPI_bus.write_byte(self.SPI_address, 3) #Ask Arduino to buzz
+                    #time.sleep(5)
+                    #self.SPI_bus.write_byte(self.SPI_address, 3) #Ask Arduino to buzz
                     time.sleep(1)
                 #else:
                     #self.SPI_bus.write_byte(self.SPI_address, 0) #Send blank
