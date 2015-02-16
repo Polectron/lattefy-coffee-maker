@@ -24,6 +24,13 @@ void setup() {
 
 void loop() {
     delay(100);
+    if (number == 1){
+      lcd.print("Haciendo cafe");
+      delay(1500);
+      lcd.print("Caf terminado");
+    }else if (number == 2){
+      lcd.print("Haciendo 2");
+    }
     if (number ==  3){
         lcd.print("Finalizado");
         buzz();
@@ -39,11 +46,6 @@ void receiveData(int byteCount){
         number = Wire.read();
         lcd.setCursor(0, 0);
         lcd.clear();
-        if (number == 1){
-            lcd.print("Haciendo 1");
-        }else if (number == 2){
-            lcd.print("Haciendo 2");
-        }
      }
 }
 
