@@ -1,14 +1,17 @@
 #include <Wire.h>
 #include <LiquidCrystal.h>
 #include "pitches.h"
-
+#include <Servo.h> 
+ 
+Servo myservo;
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 
 #define SLAVE_ADDRESS 0x04
 int number = 0;
 
 void setup() {
-    pinMode(13, OUTPUT);
+    myservo.attach(9);
+    pinMode(7, OUTPUT);
     Serial.begin(9600);// start serial for output
     lcd.begin(16, 2);
     // initialize i2c as slave
@@ -17,7 +20,9 @@ void setup() {
     // define callbacks for i2c communication
     Wire.onReceive(receiveData);
     Wire.onRequest(sendData);
-    
+    myservo.write(120);
+    lcd.setCursor(0, 0);
+    lcd.clear();
     lcd.print("Esperando orden");
     
 }
@@ -25,27 +30,34 @@ void setup() {
 void loop() {
     delay(100);
     if (number == 1){
+      lcd.setCursor(0, 0);
+      lcd.clear();
       lcd.print("Haciendo cafe");
-      delay(1500);
-      lcd.print("Caf terminado");
-    }else if (number == 2){
-      lcd.print("Haciendo 2");
+      digitalWrite(7, HIGH);
+      myservo.write(80);
+      //delay(75000);
+      delay(50000);
+      digitalWrite(7, LOW);
+      delay(30000);
+      lcd.setCursor(0, 0);
+      lcd.clear();
+      myservo.write(120);
+      lcd.print("Cafe terminado");
+      //buzz();
+      tone(8, 5000,1000);
+      //noTone(8);
+      delay(500);
+      lcd.setCursor(0, 0);
+      lcd.clear();
+      lcd.print("Esperando orden");
     }
-    if (number ==  3){
-        lcd.print("Finalizado");
-        buzz();
-        number = 0;
-        lcd.clear();
-        lcd.print("Esperando orden");
-    }
+    number = 0;
 }
 
 // callback for received data
 void receiveData(int byteCount){
     while(Wire.available()) {
         number = Wire.read();
-        lcd.setCursor(0, 0);
-        lcd.clear();
      }
 }
 
